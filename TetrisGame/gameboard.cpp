@@ -31,6 +31,7 @@ void GameBoard::startGame() {
     timer->start(1500); // 設置初始速度
     update();
     mainWindow->updateScore(); // 更新分數顯示
+    //nextBlockLabel->setPixmap(gameBoard->getNextBlockPreview());
 }
 
 void GameBoard::pauseGame() {
@@ -123,9 +124,52 @@ void GameBoard::moveToBottom() {
                 return;
             }
         }
+        // 檢查並消除已填滿的行
+        checkLines();
         currentY++;
+        update();
     }
 }
+
+
+void GameBoard::dropStep() {
+
+        if (isGameOver) return;
+
+        int steps = 3; // 每次按鍵下降的行數
+        for (int s = 0; s < steps; ++s) {
+            bool canMove = true;
+
+            // 檢查每個方塊是否可以向下移動
+            for (int i = 0; i < 4; ++i) {
+                int newX = currentX + currentPiece[i].x();
+                int newY = currentY + currentPiece[i].y() + 1;
+
+                if (newY >= BoardHeight || board[newX][newY]) {
+                    canMove = false;
+                    break;
+                }
+            }
+
+            // 如果不能再下降，固定方塊，生成新方塊並返回
+            if (!canMove) {
+                for (int i = 0; i < 4; ++i) {
+                    board[currentX + currentPiece[i].x()][currentY + currentPiece[i].y()] = true;
+                }
+                generateNewPiece(); // 生成新方塊
+                return;
+            }
+
+            // 如果可以，則向下移動一格
+            currentY++;
+        }
+        // 檢查並消除已填滿的行
+        checkLines();
+        update(); // 更新畫面
+
+    }
+
+
 
 void GameBoard::updateGame() {
     if (isPaused || isGameOver) return;
@@ -146,7 +190,8 @@ void GameBoard::updateGame() {
             return;
         }
     }
-
+    // 檢查並消除已填滿的行
+    checkLines();
     // 方塊下移
     currentY++;
     update();
@@ -180,11 +225,14 @@ void GameBoard::checkLines() {
     if (linesRemoved > 0) {
         score += linesRemoved * 100;
         linesCleared += linesRemoved;
-        int newLevel = linesCleared / 10 + 1; // 每消除 10 行升一級
+        int newLevel = linesCleared / 2 + 1; // 每消除 10 行升一級
         if (newLevel > level) {
             level = newLevel;
             int newInterval = 1500 - (level * 100); // 每提升一個等級減少 100 毫秒
             timer->setInterval(qMax(newInterval, 100)); // 確保間隔時間不低於 100 毫秒
+
+            // 發送等級改變信號
+            emit levelIncreased(level);
         }
         mainWindow->updateScore(); // 更新分數顯示
     }
@@ -201,23 +249,78 @@ void GameBoard::generateNewPiece() {
         { QPoint(1, 0), QPoint(0, 1), QPoint(1, 1), QPoint(2, 1) }  // 方塊 T
     };
 
+    // 當前方塊變為下一個方塊
+    for (int i = 0; i < 4; ++i) {
+        currentPiece[i] = nextPiece[i];
+    }
+
+    // 隨機生成新的下一個方塊
     int index = std::rand() % 7;
     for (int i = 0; i < 4; ++i) {
-        currentPiece[i] = pieces[index][i];
+        nextPiece[i] = pieces[index][i];
     }
-    currentX = BoardWidth / 2 - 1; // 確保新方塊在遊戲板的中間生成
+
+    currentX = BoardWidth / 2 - 1;
     currentY = 0;
 
-    // 檢查新生成的方塊是否立即碰撞
+    // 檢查新生成的當前方塊是否立即碰撞
     for (int i = 0; i < 4; ++i) {
         if (board[currentX + currentPiece[i].x()][currentY + currentPiece[i].y()]) {
-            // 遊戲結束
             gameOver();
             return;
         }
     }
+
+    // 更新下一個方塊的預覽圖像
+    QPixmap nextBlockPixmap = getNextBlockPreview();
+    mainWindow->updateNextBlockPreview(nextBlockPixmap);
+
     update();
+    //generateNextBlock();
 }
+
+QPixmap GameBoard::getNextBlockPreview() {
+    QPixmap pixmap(80, 80);
+    pixmap.fill(Qt::white); // 背景為黑色
+
+    QPainter painter(&pixmap);
+    painter.setBrush(Qt::red); // 假設下一個方塊為紅色
+    for (const QPoint &point : nextPiece) {
+        painter.drawRect(point.x() * 20, point.y() * 20, 20, 20); // 假設每個方塊的大小為 20x20
+    }
+
+    return pixmap;
+}
+
+/*void GameBoard::generateNextBlock() {
+    static const QPoint pieces[7][4] = {
+        { QPoint(0, 0), QPoint(1, 0), QPoint(0, 1), QPoint(1, 1) }, // 方塊 O
+        { QPoint(0, 0), QPoint(1, 0), QPoint(2, 0), QPoint(3, 0) }, // 方塊 I
+        { QPoint(0, 0), QPoint(1, 0), QPoint(2, 0), QPoint(2, 1) }, // 方塊 L
+        { QPoint(0, 0), QPoint(1, 0), QPoint(2, 0), QPoint(0, 1) }, // 方塊 J
+        { QPoint(0, 0), QPoint(1, 0), QPoint(1, 1), QPoint(2, 1) }, // 方塊 Z
+        { QPoint(1, 0), QPoint(2, 0), QPoint(0, 1), QPoint(1, 1) }, // 方塊 S
+        { QPoint(1, 0), QPoint(0, 1), QPoint(1, 1), QPoint(2, 1) }  // 方塊 T
+    };
+
+    // 當前方塊變為下一個方塊
+    for (int i = 0; i < 4; ++i) {
+        currentPiece[i] = nextPiece[i];
+    }
+
+    // 隨機生成新的下一個方塊
+    int index = std::rand() % 7;
+    for (int i = 0; i < 4; ++i) {
+        nextPiece[i] = pieces[index][i];
+    }
+
+    currentX = BoardWidth / 2 - 1;
+    currentY = 0;
+
+    // 更新下一個方塊的預覽圖像
+    QPixmap nextBlockPixmap = getNextBlockPreview();
+    mainWindow->updateNextBlockPreview(nextBlockPixmap);
+}*/
 
 void GameBoard::gameOver() {
     isGameOver = true;
@@ -236,10 +339,24 @@ void GameBoard::gameOver() {
 
 void GameBoard::paintEvent(QPaintEvent * /* event */) {
     QPainter painter(this);
-    painter.setBrush(Qt::black);
+    painter.setBrush(Qt::white);
     painter.drawRect(rect());
 
     int gridSize = qMin(width() / BoardWidth, height() / BoardHeight);
+/*
+    // 繪製下一個方塊預覽
+    int previewX = width() - 100; // 預覽區域的X座標
+    int previewY = 50;           // 預覽區域的Y座標
+    int previewGridSize = 20;    // 預覽區域的格子大小
+
+    painter.setBrush(Qt::red);
+    for (int i = 0; i < 4; ++i) {
+        painter.drawRect(previewX + nextPiece[i].x() * previewGridSize,
+                         previewY + nextPiece[i].y() * previewGridSize,
+                         previewGridSize, previewGridSize);
+    }
+*/
+
 
     // 繪製遊戲板上的固定方塊
     painter.setBrush(Qt::gray);
@@ -267,7 +384,7 @@ void GameBoard::keyPressEvent(QKeyEvent *event) {
     case Qt::Key_Left: moveLeft(); break;
     case Qt::Key_Right: moveRight(); break;
     case Qt::Key_Up: rotate(); break;
-    case Qt::Key_Down: moveToBottom(); break; // 使用下鍵快速下降
+    case Qt::Key_Down: dropStep(); break; // 使用下鍵快速下降
     case Qt::Key_Space: moveToBottom(); break;
     }
     update();

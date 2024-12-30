@@ -2,6 +2,7 @@
 #define GAMEBOARD_H
 
 #include <QWidget>
+#include <QPixmap>
 #include <QTimer>
 #include <QPoint>
 
@@ -11,7 +12,7 @@ class GameBoard : public QWidget {
     Q_OBJECT
 
 public:
-    GameBoard(QWidget *parent = nullptr);
+    explicit GameBoard(QWidget *parent = nullptr);
     void startGame();
     void pauseGame();
     void resumeGame();
@@ -21,6 +22,7 @@ public:
     void setLevel(int newLevel) { level = newLevel; }
     bool getIsPaused() const { return isPaused; }
     int getScore() const { return score; }
+    QPixmap getNextBlockPreview();
 
 protected:
     void paintEvent(QPaintEvent *event) override;
@@ -33,13 +35,17 @@ private:
     void moveRight();
     void rotate();
     void moveToBottom();
+    void dropStep();
     void generateNewPiece();
+    void generateNextBlock();
     void checkLines();
     void gameOver();
 
     QTimer *timer;
     bool board[BoardWidth][BoardHeight];
     QPoint currentPiece[4];
+    QPoint nextPiece[4];
+
     int currentX;
     int currentY;
     int score;
@@ -49,6 +55,9 @@ private:
     bool isGameOver;
     bool isGameStarted; // 添加 isGameStarted 成員變數
     MainWindow *mainWindow; // 添加 MainWindow 指針
+signals:
+    void levelIncreased(int level); // 當等級提升時通知主視窗
+
 };
 
 #endif // GAMEBOARD_H

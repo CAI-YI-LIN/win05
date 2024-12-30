@@ -6,7 +6,7 @@ int main(int argc, char *argv[]) {
 
     MainWindow window;
     window.setWindowTitle("Tetris Game");
-    window.resize(400, 400);
+   // window.resize(400, 400);
     window.show();
 
     return app.exec();
