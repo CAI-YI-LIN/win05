@@ -32,11 +32,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), elapsedTime(0), m
     timeLabel = new QLabel("時間: 00:00", this); // 初始化時間顯示的 QLabel
     QPushButton *startButton = new QPushButton("開始", this);
     QPushButton *pauseButton = new QPushButton("暫停", this);
-    //musicCheckBox = new QCheckBox("播放音樂", this); // 添加播放音樂的 QCheckBox
+    musicCheckBox = new QCheckBox("播放音樂", this); // 添加播放音樂的 QCheckBox
+
 
     connect(startButton, &QPushButton::clicked, this, &MainWindow::onStartClicked);
     connect(pauseButton, &QPushButton::clicked, this, &MainWindow::onPauseClicked);
-    //connect(musicCheckBox, &QCheckBox::toggled, this, &MainWindow::toggleMusic);
+    connect(musicCheckBox, &QCheckBox::toggled, this, &MainWindow::toggleMusic);
 
     QVBoxLayout *rightLayout = new QVBoxLayout;
     rightLayout->addWidget(scoreLabel);
@@ -44,7 +45,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), elapsedTime(0), m
     rightLayout->addWidget(timeLabel); // 添加時間顯示的 QLabel 到佈局中
     rightLayout->addWidget(startButton);
     rightLayout->addWidget(pauseButton);
-    //rightLayout->addWidget(musicCheckBox); // 添加播放音樂的 QCheckBox 到佈局中
+    rightLayout->addWidget(musicCheckBox); // 添加播放音樂的 QCheckBox 到佈局中
 
     rightLayout->setContentsMargins(10, 10, 10, 10); // 設置右側佈局的邊距
 
@@ -63,10 +64,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), elapsedTime(0), m
     timeTimer = new QTimer(this); // 初始化計時器
     connect(timeTimer, &QTimer::timeout, this, &MainWindow::updateTime);
 
-    //musicPlayer = new QSoundEffect(this); // 初始化 QSoundEffect
-    //musicPlayer->setSource(QUrl::fromLocalFile("C:/Users/LCY/Desktop/QtHW/TetrisGame/TetrisGamemusic.wav")); // 設置音樂文件
-    //musicPlayer->setLoopCount(QSoundEffect::Infinite); // 設置無限循環播放
-    //musicPlayer->setVolume(0.5f); // 設置音量
+    musicPlayer = new QSoundEffect(this); // 初始化 QSoundEffect
+    musicPlayer->setSource(QUrl("qrc:/resources/bgm.wav"));
+    musicPlayer->setLoopCount(QSoundEffect::Infinite); // 設置無限循環播放
+    musicPlayer->setVolume(0.5f); // 設置音量
 
     nextBlockLabel = new QLabel(this);
     rightLayout->addWidget(nextBlockLabel); // 添加 nextBlockLabel 到佈局
@@ -88,6 +89,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), elapsedTime(0), m
         }
     });
 
+    // 搖擺計時器
+    swingTimer = new QTimer(this);
+    connect(swingTimer, &QTimer::timeout, this, &MainWindow::swingWindow);
+
+    // 浮動計時器
+    floatTimer = new QTimer(this);
+    connect(floatTimer, &QTimer::timeout, this, &MainWindow::swingWindow);
 
     //swingTimer = new QTimer(this);
     //connect(swingTimer, &QTimer::timeout, this, &MainWindow::swingWindow);
@@ -99,23 +107,39 @@ void MainWindow::onStartClicked() {
     gameTimer->start(500 / gameBoard->getLevel());
     elapsedTime = 0; // 重置經過的時間
     timeTimer->start(1000); // 每秒更新一次時間
-    //swingTimer->start(50);
+    musicCheckBox->setChecked(true);
+    musicPlayer->play(); // 播放音樂
 
 }
 
 void MainWindow::onPauseClicked() {
     if (gameBoard->getIsPaused()) {
+        // 恢復遊戲
         gameBoard->resumeGame();
         timeTimer->start(1000); // 恢復時間計時器
-        swingTimer->start(50);
+        int currentLevel = gameBoard->getCurrentLevel();
+
+        // 根據級數恢復搖擺和浮動
+        if (currentLevel >= 2) {
+            swingTimer->start(50); // 恢復搖擺的計時器
+        }
+        if (currentLevel >= 3) {
+            floatTimer->start(50); // 恢復浮動的計時器
+        }
+
     } else {
+        // 暫停遊戲
         gameBoard->pauseGame();
         timeTimer->stop(); // 暫停時間計時器
         swingTimer->stop(); // 停止搖擺
+        floatTimer->stop(); // 停止浮動
+
+        // 可選：是否重置偏移量
         swingOffset = 0;
         floatOffset = 0;
     }
 }
+
 
 void MainWindow::updateScore() {
 
@@ -145,13 +169,13 @@ void MainWindow::updateNextBlockPreview(const QPixmap &pixmap) {
     nextBlockLabel->setPixmap(pixmap);
 }
 
-/*void MainWindow::toggleMusic(bool play) {
+void MainWindow::toggleMusic(bool play) {
     if (play) {
         musicPlayer->play(); // 播放音樂
     } else {
         musicPlayer->stop(); // 停止音樂
     }
-}*/
+}
 
 void MainWindow::swingWindow() {
     int swingRange = 5;  // 左右搖擺的範圍

@@ -23,6 +23,7 @@ public:
     bool getIsPaused() const { return isPaused; }
     int getScore() const { return score; }
     QPixmap getNextBlockPreview();
+    int getCurrentLevel() const;
 
 protected:
     void paintEvent(QPaintEvent *event) override;
@@ -40,6 +41,7 @@ private:
     void generateNextBlock();
     void checkLines();
     void gameOver();
+
 
     QTimer *timer;
     bool board[BoardWidth][BoardHeight];

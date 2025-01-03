@@ -31,7 +31,7 @@ void GameBoard::startGame() {
     timer->start(1500); // 設置初始速度
     update();
     mainWindow->updateScore(); // 更新分數顯示
-    //nextBlockLabel->setPixmap(gameBoard->getNextBlockPreview());
+
 }
 
 void GameBoard::pauseGame() {
@@ -169,6 +169,9 @@ void GameBoard::dropStep() {
 
     }
 
+int GameBoard::getCurrentLevel() const {
+    return level; // 假設 currentLevel 是 GameBoard 的成員
+}
 
 
 void GameBoard::updateGame() {
@@ -276,7 +279,7 @@ void GameBoard::generateNewPiece() {
     mainWindow->updateNextBlockPreview(nextBlockPixmap);
 
     update();
-    //generateNextBlock();
+
 }
 
 QPixmap GameBoard::getNextBlockPreview() {
@@ -292,35 +295,7 @@ QPixmap GameBoard::getNextBlockPreview() {
     return pixmap;
 }
 
-/*void GameBoard::generateNextBlock() {
-    static const QPoint pieces[7][4] = {
-        { QPoint(0, 0), QPoint(1, 0), QPoint(0, 1), QPoint(1, 1) }, // 方塊 O
-        { QPoint(0, 0), QPoint(1, 0), QPoint(2, 0), QPoint(3, 0) }, // 方塊 I
-        { QPoint(0, 0), QPoint(1, 0), QPoint(2, 0), QPoint(2, 1) }, // 方塊 L
-        { QPoint(0, 0), QPoint(1, 0), QPoint(2, 0), QPoint(0, 1) }, // 方塊 J
-        { QPoint(0, 0), QPoint(1, 0), QPoint(1, 1), QPoint(2, 1) }, // 方塊 Z
-        { QPoint(1, 0), QPoint(2, 0), QPoint(0, 1), QPoint(1, 1) }, // 方塊 S
-        { QPoint(1, 0), QPoint(0, 1), QPoint(1, 1), QPoint(2, 1) }  // 方塊 T
-    };
 
-    // 當前方塊變為下一個方塊
-    for (int i = 0; i < 4; ++i) {
-        currentPiece[i] = nextPiece[i];
-    }
-
-    // 隨機生成新的下一個方塊
-    int index = std::rand() % 7;
-    for (int i = 0; i < 4; ++i) {
-        nextPiece[i] = pieces[index][i];
-    }
-
-    currentX = BoardWidth / 2 - 1;
-    currentY = 0;
-
-    // 更新下一個方塊的預覽圖像
-    QPixmap nextBlockPixmap = getNextBlockPreview();
-    mainWindow->updateNextBlockPreview(nextBlockPixmap);
-}*/
 
 void GameBoard::gameOver() {
     isGameOver = true;
@@ -343,19 +318,7 @@ void GameBoard::paintEvent(QPaintEvent * /* event */) {
     painter.drawRect(rect());
 
     int gridSize = qMin(width() / BoardWidth, height() / BoardHeight);
-/*
-    // 繪製下一個方塊預覽
-    int previewX = width() - 100; // 預覽區域的X座標
-    int previewY = 50;           // 預覽區域的Y座標
-    int previewGridSize = 20;    // 預覽區域的格子大小
 
-    painter.setBrush(Qt::red);
-    for (int i = 0; i < 4; ++i) {
-        painter.drawRect(previewX + nextPiece[i].x() * previewGridSize,
-                         previewY + nextPiece[i].y() * previewGridSize,
-                         previewGridSize, previewGridSize);
-    }
-*/
 
 
     // 繪製遊戲板上的固定方塊

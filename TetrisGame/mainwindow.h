@@ -6,6 +6,7 @@
 #include <QCheckBox>
 #include <QLabel>
 
+
 class GameBoard;
 class QTimer;
 
@@ -29,8 +30,10 @@ private:
     QTimer *timeTimer;
     int elapsedTime;
     QSoundEffect *musicPlayer;
+    QCheckBox *musicCheckBox;
 
     QTimer *swingTimer; // 控制搖擺的定時器
+    QTimer *floatTimer; // 控制搖擺的定時器
     int swingOffset;    // 當前的水平偏移
     int swingDirection; // 搖擺方向（1 表示右，-1 表示左）
     int floatOffset;    // 上下浮動的偏移量
@@ -41,6 +44,7 @@ private slots:
     void onPauseClicked();
     void updateTime();
     void swingWindow();
+    void toggleMusic(bool play);
 };
 
 #endif // MAINWINDOW_H
