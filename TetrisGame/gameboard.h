@@ -12,6 +12,7 @@ class GameBoard : public QWidget {
     Q_OBJECT
 
 public:
+    void move();
     explicit GameBoard(QWidget *parent = nullptr);
     void startGame();
     void pauseGame();
@@ -24,6 +25,7 @@ public:
     int getScore() const { return score; }
     QPixmap getNextBlockPreview();
     int getCurrentLevel() const;
+    QTimer *getMoveTimer() const; //2025
 
 protected:
     void paintEvent(QPaintEvent *event) override;
@@ -43,7 +45,9 @@ private:
     void gameOver();
 
 
+
     QTimer *timer;
+    QTimer *moveTimer;
     bool board[BoardWidth][BoardHeight];
     QPoint currentPiece[4];
     QPoint nextPiece[4];

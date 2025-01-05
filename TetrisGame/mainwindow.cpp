@@ -26,6 +26,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), elapsedTime(0), m
 
     gameTimer = new QTimer(this);
     connect(gameTimer, &QTimer::timeout, gameBoard, &GameBoard::updateGame);
+    moveTimer = new QTimer(this);
+    connect(moveTimer, &QTimer::timeout, gameBoard, &GameBoard::move);
 
     scoreLabel = new QLabel("分數: 0", this);
     levelLabel = new QLabel("等級: 1", this);
@@ -67,7 +69,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), elapsedTime(0), m
     musicPlayer = new QSoundEffect(this); // 初始化 QSoundEffect
     musicPlayer->setSource(QUrl("qrc:/resources/bgm.wav"));
     musicPlayer->setLoopCount(QSoundEffect::Infinite); // 設置無限循環播放
-    musicPlayer->setVolume(0.5f); // 設置音量
+    musicPlayer->setVolume(1.0f); // 設置音量
 
     nextBlockLabel = new QLabel(this);
     rightLayout->addWidget(nextBlockLabel); // 添加 nextBlockLabel 到佈局
@@ -87,6 +89,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), elapsedTime(0), m
         if (level >= 3) {
             floatDirection = 1; // 等級 3 開始上下浮動
         }
+        if(level >= 4)
+        {
+            moveTimer->start(1500);
+        }
+
     });
 
     // 搖擺計時器

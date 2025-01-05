@@ -10,6 +10,11 @@ GameBoard::GameBoard(QWidget *parent) : QWidget(parent), mainWindow(qobject_cast
     clearBoard();
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &GameBoard::updateGame);
+    connect(moveTimer, &QTimer::timeout, this, &GameBoard::move);
+}
+
+QTimer *GameBoard::getMoveTimer() const {
+    return moveTimer;  // 返回定時器指針 2025
 }
 
 void GameBoard::clearBoard() {
@@ -322,7 +327,7 @@ void GameBoard::paintEvent(QPaintEvent * /* event */) {
 
 
     // 繪製遊戲板上的固定方塊
-    painter.setBrush(Qt::gray);
+    painter.setBrush(Qt::yellow);
     for (int i = 0; i < BoardWidth; ++i) {
         for (int j = 0; j < BoardHeight; ++j) {
             if (board[i][j]) {
@@ -338,6 +343,22 @@ void GameBoard::paintEvent(QPaintEvent * /* event */) {
             painter.drawRect((currentX + currentPiece[i].x()) * gridSize, (currentY + currentPiece[i].y()) * gridSize, gridSize, gridSize);
         }
     }
+}
+
+void GameBoard::move()
+{
+    static bool moveLeftNext = true;
+    if (isPaused || isGameOver) return;
+    if (moveLeftNext)
+    {
+        moveLeft();
+    }
+    else
+    {
+        moveRight();
+    }
+    moveLeftNext = !moveLeftNext;
+    update();
 }
 
 

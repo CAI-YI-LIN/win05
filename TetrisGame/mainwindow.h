@@ -28,6 +28,7 @@ private:
     QLabel *timeLabel;
     QLabel *nextBlockLabel; // 新增這行
     QTimer *timeTimer;
+    QTimer *moveTimer;//難度4
     int elapsedTime;
     QSoundEffect *musicPlayer;
     QCheckBox *musicCheckBox;

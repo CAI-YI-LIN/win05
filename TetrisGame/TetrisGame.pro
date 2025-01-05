@@ -15,3 +15,6 @@ HEADERS += \
     mainwindow.h \
     gameboard.h \
     tetrisblock.h
+
+RESOURCES += \
+    resources.qrc
