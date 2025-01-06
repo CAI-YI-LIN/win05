@@ -35,7 +35,6 @@ https://nfuedu-my.sharepoint.com/:p:/g/personal/41243101_nfu_edu_tw/ERTxmQvtgTJA
 
 •衍生功能: 背景音樂、難度調節等。
 
-
 ❑Qt 框架應用
 
 •遊戲主視窗和界面佈局: 使用 QWidget 或 QMainWindow 類來創建。
@@ -44,14 +43,12 @@ https://nfuedu-my.sharepoint.com/:p:/g/personal/41243101_nfu_edu_tw/ERTxmQvtgTJA
 
 •音效控制:通過 QCheckBox 和 QSoundEffect ，管理音樂開關。
 
-
 ❑信號與槽機制應用
 
 •按鈕點擊: 如開始、暫停、開關音樂等操作，當玩家點擊按鈕時，會發送 clicked 信號，
 並觸發對應的槽函數。
 
 •鍵盤事件:透過keyPressEvent 來捕獲鍵盤按鍵，控制方塊的移動和旋轉。
-
 
 ❑遊戲邏輯設計
 
