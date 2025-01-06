@@ -16,6 +16,7 @@ https://nfuedu-my.sharepoint.com/:p:/g/personal/41243101_nfu_edu_tw/ERTxmQvtgTJA
 • 主題: 基於 Qt 的俄羅斯方塊遊戲——「晃方世界」。​
 
 • 動機: 高中時，經常和同學一起玩 TETRIS 的線上俄羅斯方塊 PK，但總是最早被淘汰，心有不甘。為了提升自己的遊戲技巧，決定開發一款俄羅斯方塊遊戲，這樣可以調整遊戲內部數據（例如掉落速度），並進行針對性的練習。同時這也是一個學習如何應用 Qt 框架進行遊戲設計與開發的好機會。
+
 ---
 
 ## 二、內容
@@ -23,6 +24,7 @@ https://nfuedu-my.sharepoint.com/:p:/g/personal/41243101_nfu_edu_tw/ERTxmQvtgTJA
 ### 系統需求
 
 • 硬體需求:開發環境(筆電)。
+
 • 軟體需求:Qt開發環境版本(6.7.2)。
 
 
