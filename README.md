@@ -70,6 +70,8 @@ https://nfuedu-my.sharepoint.com/:p:/g/personal/41243101_nfu_edu_tw/ERTxmQvtgTJA
 
 ---
 
+❑遊戲邏輯設計
+
 •得分和等級: 隨等級提高，遊戲加速並引入視窗晃動和浮動等視覺效果，提升遊戲難度。
 
 #### 第二級
