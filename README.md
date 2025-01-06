@@ -153,7 +153,8 @@ https://nfuedu-my.sharepoint.com/:p:/g/personal/41243101_nfu_edu_tw/ERTxmQvtgTJA
 
 ### 影片
 
-[專題影片](https://github.com/user-attachments/assets/12fcb185-fc93-456b-b223-98a7185d7bb3)
+
+[專題影片](https://github.com/user-attachments/assets/5c253320-b5ca-40b8-a032-5ed820f789d1)
 
 1. **使用者體驗**：設計直觀、流暢的操作介面，確保不同年齡層（如老人或小孩）都能輕鬆上手。
 2. **程式實作**：雖然與參考資料介面有些相似，但程式實作方式僅部分邏輯參考，程式實作部分皆與參考資料程式有很大的差異。
