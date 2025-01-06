@@ -76,13 +76,13 @@ https://nfuedu-my.sharepoint.com/:p:/g/personal/41243101_nfu_edu_tw/ERTxmQvtgTJA
 
 •得分和等級: 隨等級提高，遊戲加速並引入視窗晃動和浮動等視覺效果，提升遊戲難度。
 
-#### 第二級
+#### 第二級(加入視窗左右晃動)
 ![第二級](https://github.com/user-attachments/assets/5ee6f870-94e9-451b-98eb-588a298f854d)
 
-#### 第三級
+#### 第三級(加入視窗上下晃動)
 ![第三級](https://github.com/user-attachments/assets/eee86f0d-bf3f-4471-9b4f-adec1c569348)
 
-#### 第四級
+#### 第四級(加入當前方塊左右移動)​
 ![第四級](https://github.com/user-attachments/assets/bd309f88-7c05-47b6-b4d2-11ec0da78af6)
 
 • 暫停機制的觸發條件
@@ -157,7 +157,7 @@ https://nfuedu-my.sharepoint.com/:p:/g/personal/41243101_nfu_edu_tw/ERTxmQvtgTJA
 [專題影片](https://github.com/user-attachments/assets/5c253320-b5ca-40b8-a032-5ed820f789d1)
 
 1. **使用者體驗**：設計直觀、流暢的操作介面，確保不同年齡層（如老人或小孩）都能輕鬆上手。
-2. **程式實作**：雖然與參考資料介面有些相似，但程式實作方式僅部分邏輯參考，程式實作部分皆與參考資料程式有很大的差異。
+2. **程式實作**：雖然程式實作方式與參考資料的介面有些相似，但僅在部分功能實現邏輯上有所參考。整體程式實作部分與參考資料的程式有明顯的區別。
 ---
 
 ### 參考資料
