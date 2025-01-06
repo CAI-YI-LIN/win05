@@ -71,4 +71,4 @@
 ## 五、參考資料
 
 - [QtTetris 參考資料](https://github.com/tashaxing/QtTetris)
-- [參考資料的試玩影片](https://github.com/user-attachments/assets/6d8c9369-c1b9-4377-80ae-f57b5db92372)
+- [參考資料的試玩影片(存在一些bug)](https://github.com/user-attachments/assets/6d8c9369-c1b9-4377-80ae-f57b5db92372)
